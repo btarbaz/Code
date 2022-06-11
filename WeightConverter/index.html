@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weight Converter</title>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center;" >Weight Converter</h1>
+        <div class="radio-buttons">
+            <div class="radio-custom">
+                <input type="radio" id="radio01" onclick="check()" name="unitradio" value="pound" class="radio-button">
+                <label for="radio01">Pound</label>
+            </div>
+            <div class="radio-custom">
+                <input type="radio" id="radio02" onclick="check()" name="unitradio" value="kg" class="radio-button">
+                <label for="radio02">KG</label>
+            </div>
+            <div class="radio-custom">
+                <input type="radio" id="radio03" onclick="check()" name="unitradio" value="ounces" class="radio-button">
+                <label for="radio03">Ounces</label>
+            </div>
+        </div>
+        <form>
+            <div class="inputBox">
+                <input id="inputValue" type="number" placeholder="Ounces">
+            </div>
+        </form>
+        <div id="output">
+            <h5 class="output-title-1">Grams:</h5>
+            <div class="output-1"></div>
+            <h5 class="output-title-2">Killogram:</h5>
+            <div class="output-2"></div>
+            <h5 class="output-title-3">Ounces:</h5>
+            <div class="output-3"></div>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
