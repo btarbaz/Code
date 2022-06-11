@@ -14,13 +14,17 @@ request.addEventListener('load', function () {
   <article class="country">
     <img class="country__img" src="${data.flags.png}" />
     <div class="country__data">
-      <h3 class="country__name">${data.name[0]}</h3>
+      <h3 class="country__name">${data.name.official}</h3>
       <h4 class="country__region">${data.region}</h4>
       <p class="country__row"><span>👫</span>${(
         +data.population / 10000000
-      ).toFixed(1)} people</p>
-      <p class="country__row"><span>🗣️</span>${data.languages.urd}</p>
-      <p class="country__row"><span>💰</span>${data.currencies.pkr}</p>
+      ).toFixed(1)}cr people</p>
+      <p class="country__row"><span>🗣️</span>${
+        Object.values(data.languages)[0]
+      }</p>
+      <p class="country__row"><span>💰</span>${
+        Object.values(data.currencies)[0].name
+      }</p>
     </div>
   </article> `;
   countriesContainer.insertAdjacentHTML('beforeend', html);
