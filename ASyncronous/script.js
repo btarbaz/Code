@@ -1,6 +1,7 @@
 'use strict';
 
 const countriesContainer = document.querySelector('.countries');
+const btn = document.querySelector('.btn-country');
 
 //Fetching function from api
 function renderCountry(data, className = '') {
@@ -99,6 +100,29 @@ function renderCountry(data, className = '') {
 // getCountryData('germany');
 
 //with neighbour
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.com/v3.1/name/${country}`)
+//     .then(response => response.json())
+//     .then(data => {
+//       renderCountry(data[0]);
+
+//       const neighbour = data[0].borders?.[0];
+//       return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
+//     })
+//     .then(response => response.json())
+//     .then(data => renderCountry(data[0], 'neighbour'));
+// };
+// getCountryData('pakistan');
+
+
+//------error handling basic--------
+
+// fetch(`https://restcountries.com/v3.1/name/${country}`)
+// .then(
+//   response => response.json(),
+//   err => console.log(err.message)
+// )
+//error handling in the end
 const getCountryData = function (country) {
   fetch(`https://restcountries.com/v3.1/name/${country}`)
     .then(response => response.json())
@@ -109,6 +133,9 @@ const getCountryData = function (country) {
       return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
     })
     .then(response => response.json())
-    .then(data => renderCountry(data[0], 'neighbour'));
+    .then(data => renderCountry(data[0], 'neighbour')).catch(err => )
 };
 getCountryData('pakistan');
+btn.addEventListener('click', function () {
+  
+});
