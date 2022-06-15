@@ -3,6 +3,12 @@
 const countriesContainer = document.querySelector('.countries');
 const btn = document.querySelector('.btn-country');
 
+//Error Message Function
+function renderError(msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+  //countriesContainer.style.opacity = 1;
+}
+
 //Fetching function from api
 function renderCountry(data, className = '') {
   const html = `
@@ -23,7 +29,7 @@ function renderCountry(data, className = '') {
     </div>
   </article> `;
   countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
+  //countriesContainer.style.opacity = 1;
 }
 
 // const getCountryDataAndNeighbour = function (country) {
@@ -54,7 +60,7 @@ function renderCountry(data, className = '') {
 //   });
 // };
 // getCountryDataAndNeighbour('pakistan');
-
+//---------------- CALLBACK HELL ---------------------
 // This is called callback hell. And this triangle pattern shows that nested callbacks called
 // setTimeout(() => {
 //   console.log('1 second passed');
@@ -99,7 +105,7 @@ function renderCountry(data, className = '') {
 // getCountryData('pakistan');
 // getCountryData('germany');
 
-//with neighbour
+////with neighbour
 // const getCountryData = function (country) {
 //   fetch(`https://restcountries.com/v3.1/name/${country}`)
 //     .then(response => response.json())
@@ -114,7 +120,6 @@ function renderCountry(data, className = '') {
 // };
 // getCountryData('pakistan');
 
-
 //------error handling basic--------
 
 // fetch(`https://restcountries.com/v3.1/name/${country}`)
@@ -122,7 +127,8 @@ function renderCountry(data, className = '') {
 //   response => response.json(),
 //   err => console.log(err.message)
 // )
-//error handling in the end
+
+//error handling in the end to handle all error in the chain
 const getCountryData = function (country) {
   fetch(`https://restcountries.com/v3.1/name/${country}`)
     .then(response => response.json())
@@ -133,9 +139,16 @@ const getCountryData = function (country) {
       return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
     })
     .then(response => response.json())
-    .then(data => renderCountry(data[0], 'neighbour')).catch(err => )
+    .then(data => renderCountry(data[0], 'neighbour'))
+    .catch(err => {
+      console.error(`${err} 🔥🔥🔥`);
+      renderError(`There is some error ${err.message}. Try Again Beta 😒😒😒`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
 };
-getCountryData('pakistan');
+
 btn.addEventListener('click', function () {
-  
+  getCountryData('pakistan');
 });
