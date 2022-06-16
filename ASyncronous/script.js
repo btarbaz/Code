@@ -266,3 +266,78 @@ function renderCountry(data, className = '') {
 //   console.log(res);
 // }); // this runs 4th
 // console.log('Test End'); //this runs 2nd
+
+//--------------Building a promise-------------
+//Simple example
+// const lotteryPromise = new Promise(function (resolve, reject) {
+//   if (Math.random() >= 0.5) {
+//     resolve('You win 💰💰');
+//   } else {
+//     reject('You lose, try again 💩💩');
+//   }
+// });
+// lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+
+//Adding simple timer
+// const lotteryPromise = new Promise(function (resolve, reject) {
+//   console.log('Your lottery is drawing');
+
+//   setTimeout(function () {
+//     if (Math.random() >= 0.5) {
+//       resolve('You win 💰💰');
+//     } else {
+//       reject(new Error('You lose, try again 💩💩'));
+//     }
+//   }, 2000);
+// });
+// lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+
+//promisifying callback functions(setTimeout) means a function which return promise instead of call back
+
+// function wait(second) {
+//   // console.log('Wait starts');
+//   return new Promise(resolve => setTimeout(resolve, second * 1000));
+// }
+// wait(2)
+//   .then(() => {
+//     console.log('You have waited 2 seconds');
+//     return wait(1);
+//   })
+//   .then(() => console.log('You waited 1 second more'));
+
+//Now we can avoid this callback hell
+// setTimeout(() => {
+//   console.log('1 second passed');
+//   setTimeout(() => {
+//     console.log('2 second passed');
+//     setTimeout(() => {
+//       console.log('3 second passed');
+//       setTimeout(() => {
+//         console.log('4 second passed');
+//       }, 1000);
+//     }, 1000);
+//   }, 1000);
+// }, 1000);
+
+// function wait(second) {
+//   return new Promise(resolve => setTimeout(resolve, second * 1000));
+// }
+// wait(1)
+//   .then(() => {
+//     console.log('1 second passed');
+//     return wait(1);
+//   })
+//   .then(() => {
+//     console.log('2 seconds passed');
+//     return wait(1);
+//   })
+//   .then(() => {
+//     console.log('3 seconds passed');
+//     return wait(1);
+//   })
+//   .then(() => console.log('4 seconds passed'));
+
+//Quick build promise or static promise
+
+Promise.resolve('abc').then(x => console.log(x));
+Promise.reject(new Error('abc')).catch(x => console.error(x));
