@@ -196,30 +196,73 @@ function renderCountry(data, className = '') {
 // getCountryData('ssdsdssd');
 
 //--------------Function for fetch,response-----------------------
-const getCountryData = function (country) {
-  //getJson function
-  getJson(`https://restcountries.com/v3.1/name/${country}`, 'Country not found')
-    .then(data => {
-      renderCountry(data[0]);
+// const getCountryData = function (country) {
+//   //getJson function
+//   getJson(`https://restcountries.com/v3.1/name/${country}`, 'Country not found')
+//     .then(data => {
+//       renderCountry(data[0]);
 
-      const neighbour = data[0].borders?.[0];
-      // generating new error.
-      if (!neighbour) throw new Error(`No Neighbouring Countries`);
-      return getJson(
-        `https://restcountries.com/v3.1/alpha/${neighbour}`,
-        'Country not found'
-      );
-    })
-    .then(data => renderCountry(data[0], 'neighbour'))
-    .catch(err => {
-      console.error(`${err} 🔥🔥🔥`);
-      renderError(`There is some error ${err.message}. Try Again Beta 😒😒😒`);
-    })
-    //finally works after promise settled
-    .finally(() => {
-      countriesContainer.style.opacity = 1;
-    });
-};
-btn.addEventListener('click', function () {
-  getCountryData('australia');
-});
+//       const neighbour = data[0].borders?.[0];
+//       // generating new error.
+//       if (!neighbour) throw new Error(`No Neighbouring Countries`);
+//       return getJson(
+//         `https://restcountries.com/v3.1/alpha/${neighbour}`,
+//         'Country not found'
+//       );
+//     })
+//     .then(data => renderCountry(data[0], 'neighbour'))
+//     .catch(err => {
+//       console.error(`${err} 🔥🔥🔥`);
+//       renderError(`There is some error ${err.message}. Try Again Beta 😒😒😒`);
+//     })
+//     //finally works after promise settled
+//     .finally(() => {
+//       countriesContainer.style.opacity = 1;
+//     });
+// };
+// btn.addEventListener('click', function () {
+//   getCountryData('australia');
+// });
+
+//-------------Coding Challenge #1: Get country details by its coordinates.-------------
+
+//function: whereAmI
+
+// const whereAmI = function (lat, lng) {
+//   fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+//     .then(response => {
+//       //console.log(response);
+
+//       if (!response.ok)
+//         throw new Error(`Something went wrong:${response.status}`);
+//       return response.json();
+//     })
+//     .then(data => {
+//       //console.log(data);
+//       return fetch(`https://restcountries.com/v3.1/name/${data.country}`);
+//     })
+//     .then(response => {
+//       //console.log(response);
+//       if (!response.ok) throw new Error(`Country not found ${response.status}`);
+//       return response.json();
+//     })
+//     .then(data => {
+//       //console.log(data[0]);
+//       renderCountry(data[0]);
+//     })
+//     .catch(err => renderError(err.message))
+//     .finally(() => (countriesContainer.style.opacity = 1));
+// };
+// whereAmI(-33.933, 18.474);
+
+//----------Event loop, How it works-----------
+//timers, dom, api go in callback queue. but promises and others go in microtask queue which get priority over callback queue. And if a promise get another promise then it get proirity over other promises.
+
+// console.log('Test Start'); //this runs 1st
+// setTimeout(() => console.log('0 second passed'), 0); //this runs 5th
+// Promise.resolve('Resolved promise 1').then(res => console.log(res)); //this runs 3rd
+// Promise.resolve('Resolved promise 2').then(res => {
+//   for (let i = 0; i > 1000000000000; i++) {}
+//   console.log(res);
+// }); // this runs 4th
+// console.log('Test End'); //this runs 2nd
