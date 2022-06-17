@@ -226,7 +226,7 @@ function renderCountry(data, className = '') {
 
 //-------------Coding Challenge #1: Get country details by its coordinates.-------------
 
-//function: whereAmI
+//-----function: whereAmI
 
 // const whereAmI = function (lat, lng) {
 //   fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
@@ -256,7 +256,7 @@ function renderCountry(data, className = '') {
 // whereAmI(-33.933, 18.474);
 
 //----------Event loop, How it works-----------
-//timers, dom, api go in callback queue. but promises and others go in microtask queue which get priority over callback queue. And if a promise get another promise then it get proirity over other promises.
+//------timers, dom, api go in callback queue. but promises and others go in microtask queue which get priority over callback queue. And if a promise get another promise then it get proirity over other promises.
 
 // console.log('Test Start'); //this runs 1st
 // setTimeout(() => console.log('0 second passed'), 0); //this runs 5th
@@ -268,7 +268,7 @@ function renderCountry(data, className = '') {
 // console.log('Test End'); //this runs 2nd
 
 //--------------Building a promise-------------
-//Simple example
+//-----Simple example
 // const lotteryPromise = new Promise(function (resolve, reject) {
 //   if (Math.random() >= 0.5) {
 //     resolve('You win 💰💰');
@@ -278,7 +278,7 @@ function renderCountry(data, className = '') {
 // });
 // lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
 
-//Adding simple timer
+//------Adding simple timer
 // const lotteryPromise = new Promise(function (resolve, reject) {
 //   console.log('Your lottery is drawing');
 
@@ -292,7 +292,7 @@ function renderCountry(data, className = '') {
 // });
 // lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
 
-//promisifying callback functions(setTimeout) means a function which return promise instead of call back
+//-----promisifying callback functions(setTimeout) means a function which return promise instead of call back
 
 // function wait(second) {
 //   // console.log('Wait starts');
@@ -305,7 +305,7 @@ function renderCountry(data, className = '') {
 //   })
 //   .then(() => console.log('You waited 1 second more'));
 
-//Now we can avoid this callback hell
+//------Now we can avoid this callback hell
 // setTimeout(() => {
 //   console.log('1 second passed');
 //   setTimeout(() => {
@@ -337,7 +337,55 @@ function renderCountry(data, className = '') {
 //   })
 //   .then(() => console.log('4 seconds passed'));
 
-//Quick build promise or static promise
+//-----Quick build promise or static promise------
 
-Promise.resolve('abc').then(x => console.log(x));
-Promise.reject(new Error('abc')).catch(x => console.error(x));
+// Promise.resolve('abc').then(x => console.log(x));
+// Promise.reject(new Error('abc')).catch(x => console.error(x));
+
+//-------------Promisifying geolocation api -------------
+//------callback function, now promisifying it
+// navigator.geolocation.getCurrentPosition(
+//   position => console.log(position),
+//   err => console.error(err)
+// );
+// console.log('getting location');
+
+//Making promise based api
+const getLocation = function () {
+  return new Promise(function (resolve, reject) {
+    // navigator.geolocation.getCurrentPosition(
+    //   position => resolve(position),
+    //   err => reject(err)
+    // );
+    //simpler form
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+//-------Now lets get country details based on your current location using promisifying function-----
+const whereAmI = function () {
+  getLocation()
+    .then(pos => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+      return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    })
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`Something went wrong:${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      return fetch(`https://restcountries.com/v3.1/name/${data.country}`);
+    })
+    .then(response => {
+      if (!response.ok) throw new Error(`Country not found ${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      console.log(`You are in ${data[0].capital},${data[0].name.official}`);
+      renderCountry(data[0]);
+    })
+    .catch(err => renderError(err.message))
+    .finally(() => (countriesContainer.style.opacity = 1));
+};
+btn.addEventListener('click', whereAmI);
