@@ -15,7 +15,7 @@ const getJson = function (url, msgError = 'Something wrong happened: ') {
 //Error Message Function
 function renderError(msg) {
   countriesContainer.insertAdjacentText('beforeend', msg);
-  //countriesContainer.style.opacity = 1;
+  countriesContainer.style.opacity = 1;
 }
 
 //Fetching function from api
@@ -38,7 +38,7 @@ function renderCountry(data, className = '') {
     </div>
   </article> `;
   countriesContainer.insertAdjacentHTML('beforeend', html);
-  //countriesContainer.style.opacity = 1;
+  countriesContainer.style.opacity = 1;
 }
 
 // const getCountryDataAndNeighbour = function (country) {
@@ -351,41 +351,130 @@ function renderCountry(data, className = '') {
 // console.log('getting location');
 
 //Making promise based api
+// const getLocation = function () {
+//   return new Promise(function (resolve, reject) {
+//     // navigator.geolocation.getCurrentPosition(
+//     //   position => resolve(position),
+//     //   err => reject(err)
+//     // );
+//     //simpler form
+//     navigator.geolocation.getCurrentPosition(resolve, reject);
+//   });
+// };
+
+//-------Now lets get country details based on your current location using promisifying function-----
+// const whereAmI = function () {
+//   getLocation()
+//     .then(pos => {
+//       const { latitude: lat, longitude: lng } = pos.coords;
+//       return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+//     })
+//     .then(response => {
+//       if (!response.ok)
+//         throw new Error(`Something went wrong:${response.status}`);
+//       return response.json();
+//     })
+//     .then(data => {
+//       return fetch(`https://restcountries.com/v3.1/name/${data.country}`);
+//     })
+//     .then(response => {
+//       if (!response.ok) throw new Error(`Country not found ${response.status}`);
+//       return response.json();
+//     })
+//     .then(data => {
+//       console.log(`You are in ${data[0].capital},${data[0].name.official}`);
+//       renderCountry(data[0]);
+//     })
+//     .catch(err => renderError(err.message))
+//     .finally(() => (countriesContainer.style.opacity = 1));
+// };
+// btn.addEventListener('click', whereAmI);
+
+//-------------Coding Challenge #2: Display Images after every 2 second passed.-------------
+
+// const imgContainer = document.querySelector('.images');
+// //-------for hiding after 2 sec
+// let currentImg;
+
+// //-------Function: Image returning promise
+// const createImage = function (imgPath) {
+//   return new Promise(function (resolve, reject) {
+//     const img = document.createElement('img');
+//     img.src = imgPath;
+//     img.addEventListener('load', function () {
+//       imgContainer.appendChild(img);
+//       resolve(img);
+//     });
+//     img.addEventListener('error', function () {
+//       reject(new Error('Image not found !'));
+//     });
+//   });
+// };
+
+// //-------function: wait
+// function wait(second) {
+//   return new Promise(function (resolve) {
+//     setTimeout(resolve, second * 1000);
+//   });
+// }
+
+// createImage('img/img-1.png')
+//   .then(img => {
+//     currentImg = img;
+//     console.log('loaded 1st image');
+//     return wait(2);
+//   })
+//   .then(() => {
+//     currentImg.style.display = 'none';
+//     return createImage('img/img-2.png');
+//   })
+//   .then(img => {
+//     currentImg = img;
+//     console.log('Loaded 2nd image');
+//     return wait(2);
+//   })
+//   .then(() => {
+//     currentImg.style.display = 'none';
+//     console.log('done');
+//   })
+//   .catch(err => console.error(err.message));
+
+//---------------------Async | Await feature---------------------
+//it make function asyncronous when called it runs in background. now with await, then is completely gone. it is syntactic suger. Like this...
+// fetch(`https://restcountries.com/v3.1/name/${country}`).then(res => console.log(res))
+// const whereAmI = async function (country) {
+//   const res = await fetch(`https://restcountries.com/v3.1/name/${country}`);
+//   console.log(res);
+//   const data = await res.json();
+//   renderCountry(data[0]);
+// };
+
+// whereAmI('pakistan');
+//----------------lets use previous functions and get country details by geolocation api using Async|Await-----------------
+//------promisifyd function which get current location
 const getLocation = function () {
   return new Promise(function (resolve, reject) {
-    // navigator.geolocation.getCurrentPosition(
-    //   position => resolve(position),
-    //   err => reject(err)
-    // );
-    //simpler form
     navigator.geolocation.getCurrentPosition(resolve, reject);
   });
 };
+const whereAmI = async function () {
+  //get position
+  const pos = await getLocation();
 
-//-------Now lets get country details based on your current location using promisifying function-----
-const whereAmI = function () {
-  getLocation()
-    .then(pos => {
-      const { latitude: lat, longitude: lng } = pos.coords;
-      return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
-    })
-    .then(response => {
-      if (!response.ok)
-        throw new Error(`Something went wrong:${response.status}`);
-      return response.json();
-    })
-    .then(data => {
-      return fetch(`https://restcountries.com/v3.1/name/${data.country}`);
-    })
-    .then(response => {
-      if (!response.ok) throw new Error(`Country not found ${response.status}`);
-      return response.json();
-    })
-    .then(data => {
-      console.log(`You are in ${data[0].capital},${data[0].name.official}`);
-      renderCountry(data[0]);
-    })
-    .catch(err => renderError(err.message))
-    .finally(() => (countriesContainer.style.opacity = 1));
+  //destructing to get lat and lng separate
+  const { latitude: lat, longitude: lng } = pos.coords;
+  //reverse geocoding using api
+  const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+  //convert it in json to readable
+  const dataGeo = await resGeo.json();
+  //put location's property in country api
+  const res = await fetch(
+    `https://restcountries.com/v3.1/name/${dataGeo.country}`
+  );
+  //make it readable
+  const data = await res.json();
+  //function which access properties of it
+  renderCountry(data[0]);
 };
-btn.addEventListener('click', whereAmI);
+
+whereAmI();
