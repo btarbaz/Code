@@ -457,24 +457,69 @@ const getLocation = function () {
     navigator.geolocation.getCurrentPosition(resolve, reject);
   });
 };
-const whereAmI = async function () {
-  //get position
-  const pos = await getLocation();
+// const whereAmI = async function () {
+//   //get position
+//   const pos = await getLocation();
 
-  //destructing to get lat and lng separate
-  const { latitude: lat, longitude: lng } = pos.coords;
-  //reverse geocoding using api
-  const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
-  //convert it in json to readable
-  const dataGeo = await resGeo.json();
-  //put location's property in country api
-  const res = await fetch(
-    `https://restcountries.com/v3.1/name/${dataGeo.country}`
-  );
-  //make it readable
-  const data = await res.json();
-  //function which access properties of it
-  renderCountry(data[0]);
-};
+//   //destructing to get lat and lng separate
+//   const { latitude: lat, longitude: lng } = pos.coords;
+//   //reverse geocoding using api
+//   const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+//   //convert it in json to readable
+//   const dataGeo = await resGeo.json();
+//   //put location's property in country api
+//   const res = await fetch(
+//     `https://restcountries.com/v3.1/name/${dataGeo.country}`
+//   );
+//   //make it readable
+//   const data = await res.json();
+//   //function which access properties of it
+//   renderCountry(data[0]);
+// };
 
-whereAmI();
+// whereAmI();
+
+//---------------------Try Catch--------------------
+//----------simple
+// try {
+//   let a = 2;
+//   const b = 3;
+//   a = 5;
+// } catch (err) {
+//   console.error(err.message);
+// }
+//  //---------Implementation of try catch
+// const whereAmI = async function () {
+//   //get position
+//   try {
+//     const pos = await getLocation();
+
+//     //destructing to get lat and lng separate
+//     const { latitude: lat, longitude: lng } = pos.coords;
+//     //reverse geocoding using api
+//     const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+//     //creating new error to handle 403 error
+//     if (!resGeo.ok) {
+//       throw new Error('Location not found 💩');
+//     }
+//     //convert it in json to readable
+//     const dataGeo = await resGeo.json();
+//     //put location's property in country api
+//     const res = await fetch(
+//       `https://restcountries.com/v3.1/name/${dataGeo.country}`
+//     );
+//     //creating new error to handle 404 error
+//     if (!res.ok) {
+//       throw new Error('Country not found 💩');
+//     }
+//     //make it readable
+//     const data = await res.json();
+//     //function which access properties of it
+//     renderCountry(data[0]);
+//   } catch (err) {
+//     console.error(`${err.message} 🔥🔥`);
+//     renderError(`${err.message} 🔥🔥`);
+//   }
+// };
+
+// whereAmI();
