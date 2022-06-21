@@ -716,3 +716,62 @@ PART 2
 4. Use a promise combinator function to actually get the images from the array 😉
 5. Add the 'paralell' class to all the images (it has some CSS styles).
 TEST DATA: ['img/img-1.jpg', 'img/img-2.jpg', 'img/img-3.jpg']. To test, turn off the 'loadNPause' function.*/
+
+//------------PART 01
+// const imageContainer = document.querySelector('.images');
+// const createImage = function (scr) {
+//   return new Promise(function (resolve, reject) {
+//     const img = document.createElement('img');
+//     img.src = scr;
+//     img.addEventListener('load', () => {
+//       imageContainer.append(img);
+//       resolve(img);
+//     });
+//     img.addEventListener('error', () => {
+//       reject(new Error('Image not found'));
+//     });
+//   });
+// };
+// // //-------function: wait
+// function wait(second) {
+//   return new Promise(function (resolve) {
+//     setTimeout(resolve, second * 1000);
+//   });
+// }
+
+// const loadNPause = async function () {
+//   try {
+//     //1st image
+//     let img = await createImage(`img/img-1.png`);
+//     console.log('image 1 loaded');
+//     await wait(2);
+//     img.style.display = 'none';
+
+//     //2nd image
+//     img = await createImage('img/img-2.png');
+//     console.log('image 2 loaded');
+//     await wait(2);
+//     img.style.display = 'none';
+//   } catch (err) {
+//     renderError(err.message);
+//   }
+// };
+// loadNPause();
+
+// const loadAll = async function (imgAttr) {
+//   try {
+//     //from input array we put element in createImage function using 'map'
+//     const imgs = await imgAttr.map(async img => await createImage(img));
+//     console.log(imgs);
+//     //.all to get images from the promises.
+//     const imgEl = await Promise.all(imgs);
+//     console.log(imgEl);
+//     //appling a class
+//     imgEl.forEach(img => (img.style.classlist = 'parallel'));
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+// loadAll(['img/img-1.png', 'img/img-2.png']);
+
+//--------------------------------------THE END-------------------------------------------//
