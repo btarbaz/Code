@@ -523,3 +523,153 @@ const getLocation = function () {
 // };
 
 // whereAmI();
+
+//-------------------value returning from Async functions-------------=----
+
+// const whereAmI = async function () {
+//   //get position
+//   try {
+//     const pos = await getLocation();
+
+//     //destructing to get lat and lng separate
+//     const { latitude: lat, longitude: lng } = pos.coords;
+//     //reverse geocoding using api
+//     const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+//     //creating new error to handle 403 error
+//     if (!resGeo.ok) {
+//       throw new Error('Location not found 💩');
+//     }
+//     //convert it in json to readable
+//     const dataGeo = await resGeo.json();
+//     //put location's property in country api
+//     const res = await fetch(
+//       `https://restcountries.com/v3.1/name/${dataGeo.country}`
+//     );
+//     //creating new error to handle 404 error
+//     if (!res.ok) {
+//       throw new Error('Country not found 💩');
+//     }
+//     //make it readable
+//     const data = await res.json();
+//     //function which access properties of it
+//     renderCountry(data[0]);
+//     //returning string(when it fulfilled it return value string)
+//     return `You are in ${dataGeo.city}, ${dataGeo.country}`;
+//   } catch (err) {
+//     console.error(`${err.message} 🔥🔥`);
+//     renderError(`${err.message} 🔥🔥`);
+
+//     //reject promise returned from async function. rethrowing error is solve the problem
+//     throw err;
+//   }
+// };
+
+// //---------Old methods combine with Async/await
+// console.log('1: Will get location');
+// // whereAmI()
+// //   .then(city => console.log(`2: ${city}`))
+// //   .catch(err => console.error(`2: ${err.message}`))
+// //   .finally(() => console.log('3: Finished getting location'));
+
+// //----------using Async/await
+// //-----iffe(immediately invoked function expression)
+// // (function(){
+// //   //------
+// // })();
+
+// (async function () {
+//   try {
+//     const city = await whereAmI();
+//     console.log(`2: ${city}`);
+//   } catch (err) {
+//     console.error(`2: ${err.message}`);
+//   }
+//   console.log('3: Finished getting location');
+// })();
+
+//---------------------Running promises in Parllel--------------------------
+
+//------this runs promises in sequence
+// const get3Countryies = async function (c1, c2, c3) {
+//   try {
+//     const [data1] = await getJson(`https://restcountries.com/v3.1/name/${c1}`);
+//     const [data2] = await getJson(`https://restcountries.com/v3.1/name/${c2}`);
+//     const [data3] = await getJson(`https://restcountries.com/v3.1/name/${c3}`);
+
+//     console.log([data1.capital, data2.capital, data3.capital]);
+//   } catch (err) {
+//     console.error(err.message);
+//   }
+// };
+
+// get3Countryies('pakistan', 'usa', 'spain');
+
+//--------promises running in parallel
+// const get3Countryies = async function (c1, c2, c3) {
+//   try {
+//     //.all is a combinator with runs promises in parallel. it receive array and return array but shortcircuit when a promise rejects
+//     const data = await Promise.all([
+//       getJson(`https://restcountries.com/v3.1/name/${c1}`),
+//       getJson(`https://restcountries.com/v3.1/name/${c2}`),
+//       getJson(`https://restcountries.com/v3.1/name/${c3}`),
+//     ]);
+//     console.log(data.map(d => d[0].capital));
+//   } catch (err) {
+//     console.error(err.message);
+//   }
+// };
+
+// get3Countryies('pakistan', 'usa', 'spain');
+
+//------------------Promise Combinator: all,race,allsettled,any------------
+
+//-------promise.race: fastest promise fulfilled first display. whether reject or pass
+// (async function () {
+//   const data = await Promise.race([
+//     getJson(`https://restcountries.com/v3.1/name/italy`),
+//     getJson(`https://restcountries.com/v3.1/name/france`),
+//     getJson(`https://restcountries.com/v3.1/name/germany`),
+//   ]);
+//   console.log(data[0].capital);
+// })();
+
+//-----real world example
+// const timeout = function (sec) {
+//   return new Promise(function (_, reject) {
+//     setTimeout(function () {
+//       reject(new Error('Request took too long!💩💩'));
+//     }, sec * 1000);
+//   });
+// };
+// Promise.race(
+//   [getJson(`https://restcountries.com/v3.1/name/italy`), timeout(2)],
+//   getJson(`https://restcountries.com/v3.1/name/japan`),
+//   getJson(`https://restcountries.com/v3.1/name/france`)
+// )
+//   .then(data => console.log(data[0]))
+//   .catch(err => console.log(err));
+
+//--------Promise.allSettled:[ES.2020] return a array of all the settle promises whether reject or resolve
+// Promise.allSettled([
+//   Promise.resolve('success'),
+//   Promise.reject('Error'),
+//   Promise.resolve('Another success'),
+// ]).then(res => console.log(res));
+
+//---------Promise.all: return fulfilled promises. shortcircuit when one rejects
+// Promise.all([
+//   Promise.resolve('success'),
+//   Promise.resolve('Error'),
+//   Promise.reject('Another success'),
+// ])
+//   .then(res => console.log(res))
+//   .catch(err => console.error(err));
+
+//---------Promise.any: [ES.2021], return only first fulfilled promise
+// Promise.any([
+//   Promise.reject('Error'),
+//   Promise.reject('Error'),
+//   Promise.resolve('Another success'),
+// ])
+//   .then(res => console.log(res))
+//   .catch(err => console.error(err));
