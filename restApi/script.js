@@ -1,6 +1,11 @@
-const getJson = function (url) {
-  return fetch(url)
-    .then(res => res.json())
-    .then(data => console.log(data));
+const getJson = function (url, action = '') {
+  return fetch(url, {
+    method: action,
+  }).then(res => res.json());
 };
-getJson('https://jsonplaceholder.typicode.com/todos/1');
+
+const msgTodos = document.querySelector('.msg');
+getJson('https://jsonplaceholder.typicode.com/todos/1', 'GET').then(data => {
+  console.log(data);
+  msgTodos.textContent = JSON.stringify(data);
+});
