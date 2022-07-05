@@ -18,7 +18,7 @@ const displayUsers = function (dataApi) {
 const addUserToList = function (data) {
   const userList = document.querySelector('#user-list');
   const row = document.createElement('tr');
-  row.innerHTML = `<td>${data.username}</td><td>${data.name}</td><td>|</td><td><a href="" class="btn-edit">Edit</a></td><td><a href="#" class="btn-delete">X</a></td>`;
+  row.innerHTML = `<td>${data.username}</td><td>${data.name}</td><td>|</td><td><a href="#" class="btn-edit">Edit</a></td><td><a href="#" class="btn-delete">X</a></td>`;
   userList.appendChild(row);
 };
 //clear fields
@@ -28,7 +28,7 @@ const clearFields = function () {
 };
 //Delete user
 const userDelete = function (el) {
-  if ((el.textNode = 'X')) {
+  if (el.innerHTML === 'X') {
     el.parentElement.parentElement.remove();
   }
 };
@@ -38,10 +38,20 @@ userList.addEventListener('click', dl => {
 });
 
 //Edit user
+const userEdit = function (ed) {
+  if (ed.innerHTML === 'Edit') {
+    //console.log(ed.parentElement.parentElement.children[1].innerHTML);
+    const username = document.querySelector('#username');
+    username.value = ed.parentElement.parentElement.children[0].innerHTML;
+    const user = document.querySelector('#user');
+    user.value = ed.parentElement.parentElement.children[1].innerHTML;
+    ed.parentElement.parentElement.remove();
+  }
+};
 //Event
 userList.addEventListener('click', edit => {
-  edit.preventDefault();
   console.log(edit.target);
+  userEdit(edit.target);
 });
 
 //Add user
