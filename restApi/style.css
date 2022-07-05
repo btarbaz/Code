@@ -32,16 +32,16 @@ header {
   padding: 3rem 2rem;
 }
 
-#my-form {
+#form-submit {
   padding: 2rem;
   background: #f4f4f4;
 }
 
-#my-form label {
+#form-submit label {
   display: block;
 }
 
-#my-form input[type='text'] {
+#form-submit input[type='text'] {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
@@ -59,9 +59,35 @@ header {
   border-radius: 5px;
   margin: 5px 0;
 }
-
 .btn:hover {
   background: #444;
+}
+.btn-delete {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  border: 0;
+  background: rgb(236, 0, 0);
+  color: #fff;
+  border-radius: 5px;
+  margin: 5px 0;
+}
+.btn-delete:hover {
+  background: rgb(116, 1, 1);
+}
+.btn-edit {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  border: 0;
+  background: rgb(0, 183, 255);
+  color: #fff;
+  border-radius: 5px;
+  margin: 5px 0;
+}
+
+.btn-edit:hover {
+  background: rgb(0, 38, 255);
 }
 
 .bg-dark {

@@ -9,11 +9,35 @@
   </head>
   <body>
     <header>
-      <h1>Rest Api</h1>
+      <h1>My FORM</h1>
     </header>
 
     <div class="container">
       <div class="msg"></div>
+      <form action="" id="form-submit">
+        <div>
+          <label for="username" class="user">Username:</label>
+          <input type="text" id="username" />
+        </div>
+        <div>
+          <label for="user" class="user">User:</label>
+          <input type="text" id="user" />
+        </div>
+
+        <input type="submit" class="btn" value="Submit" />
+      </form>
+      <table>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>User</th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="user-list"></tbody>
+      </table>
     </div>
 
     <!-- <section class="container">
