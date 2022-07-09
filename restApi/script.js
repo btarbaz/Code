@@ -1,3 +1,5 @@
+'use strict';
+
 const myform = document.querySelector('#form-submit');
 const userList = document.querySelector('#user-list');
 //User block
